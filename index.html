@@ -5,53 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>เกมวาดภาพ ห้องศิลปะ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;700&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#e9edf2; --panel:#ffffff; --ink:#1b2430; --muted:#5b6675; --line:#cdd5df;
-  --blue:#1d4ed8; --yellow:#fcc419; --red:#e03131; --on-blue:#ffffff;
+  --bg:#fff1f6; --panel:#ffffff; --ink:#5b4a6b; --muted:#8c7a9c; --line:#eadff2; --edge:#dccbf0; --dot:rgba(255,255,255,.9);
+  --blue:#b5a6f5; --yellow:#ffe8a3; --red:#ff9aa8; --on-blue:#3f2f63;
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--bg:#141a22;--panel:#1e2630;--ink:#eef2f7;--muted:#9aa7b8;--line:#344050;--blue:#6b93ff;--on-blue:#10151c;}
+  :root:not([data-theme="light"]){--bg:#2b2438;--panel:#3a3150;--ink:#fbeefc;--muted:#c9b8dc;--line:#52466b;--edge:#6a5c8a;--dot:rgba(255,255,255,.05);--blue:#b7a8ff;--on-blue:#2b2438;}
 }
-:root[data-theme="dark"]{--bg:#141a22;--panel:#1e2630;--ink:#eef2f7;--muted:#9aa7b8;--line:#344050;--blue:#6b93ff;--on-blue:#10151c;}
+:root[data-theme="dark"]{--bg:#2b2438;--panel:#3a3150;--ink:#fbeefc;--muted:#c9b8dc;--line:#52466b;--edge:#6a5c8a;--dot:rgba(255,255,255,.05);--blue:#b7a8ff;--on-blue:#2b2438;}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Thai",system-ui,sans-serif;line-height:1.6}
-h1,h2,h3{font-family:"Prompt","Noto Sans Thai",system-ui,sans-serif;margin:0;line-height:1.25}
+body{margin:0;background:var(--bg);background-image:radial-gradient(circle,var(--dot) 3px,transparent 3.5px);background-size:30px 30px;color:var(--ink);font-family:"Noto Sans Thai",system-ui,sans-serif;line-height:1.6}
+h1,h2,h3{font-family:"Mali","Noto Sans Thai",system-ui,sans-serif;margin:0;line-height:1.25}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .wrap{max-width:1100px;margin:0 auto;padding:16px}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 header h1{font-size:1.6rem}
 .stats{display:flex;gap:10px}
-.stat{background:var(--panel);border:2px solid var(--ink);border-radius:8px;padding:4px 14px;text-align:center;min-width:84px}
-.stat b{display:block;font-family:"Prompt",sans-serif;font-size:1.3rem}
+.stat{background:var(--panel);border:3px solid var(--edge);border-radius:18px;padding:4px 14px;text-align:center;min-width:84px}
+.stat b{display:block;font-family:"Mali",sans-serif;font-size:1.3rem}
 .stat span{font-size:.8rem;color:var(--muted)}
 .layout{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
 @media (max-width:820px){.layout{grid-template-columns:1fr}}
-.panel{background:var(--panel);border:2px solid var(--ink);border-radius:10px;padding:16px}
+.panel{background:var(--panel);border:3px solid var(--edge);border-radius:24px;padding:16px}
 .card .subject{font-size:2rem;margin:6px 0 2px}
-.twist{display:inline-block;background:var(--yellow);color:#1b2430;border:2px solid #1b2430;border-radius:6px;padding:2px 10px;font-weight:600}
+.twist{display:inline-block;background:var(--yellow);color:#5b4a6b;border:2px solid #e8c96a;border-radius:999px;padding:2px 10px;font-weight:600}
 .card p{margin:8px 0;color:var(--muted)}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.btn{border:2px solid var(--ink);background:var(--panel);border-radius:8px;padding:8px 14px;font-weight:600;min-height:44px}
+.btn{border:3px solid var(--edge);background:var(--panel);border-radius:16px;padding:8px 14px;font-weight:600;min-height:44px;box-shadow:0 3px 0 var(--edge)}
+.btn:active{transform:translateY(2px);box-shadow:none}
 .btn.primary{background:var(--blue);color:var(--on-blue)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .seg{display:flex;gap:6px;margin-top:8px}
 .seg button{flex:1;border:2px solid var(--line);background:transparent;border-radius:8px;padding:6px;min-height:44px}
-.seg button[aria-pressed="true"]{border-color:var(--ink);background:var(--yellow);color:#1b2430;font-weight:600}
+.seg button[aria-pressed="true"]{border-color:var(--ink);background:var(--yellow);color:#5b4a6b;font-weight:600}
 .timer{height:12px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0 4px}
 .timer i{display:block;height:100%;width:100%;background:var(--blue);transition:width 1s linear}
 .timer.low i{background:var(--red)}
-.clock{font-family:"Prompt",sans-serif;font-size:1.4rem}
+.clock{font-family:"Mali",sans-serif;font-size:1.4rem}
 .stage{display:flex;flex-direction:column;gap:10px;min-width:0}
-.canvaswrap{position:relative;background:#fff;border:2px solid var(--ink);border-radius:10px;overflow:hidden}
+.canvaswrap{position:relative;background:#fff;border:3px solid var(--edge);border-radius:24px;overflow:hidden}
 canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;touch-action:none;cursor:crosshair}
-.lock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,26,34,.55);color:#fff;font-family:"Prompt",sans-serif;font-size:1.3rem;text-align:center;padding:20px}
+.lock{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;background:rgba(255,240,247,.88);color:#5b4a6b;font-family:"Mali",sans-serif;font-size:1.3rem;text-align:center;padding:20px}
+.mascot{display:flex;align-items:flex-end;gap:6px;margin-bottom:12px}
+.mascot svg{flex:none}
+.bubble{position:relative;background:var(--yellow);color:#5b4a6b;border-radius:18px;padding:8px 12px;font-size:.95rem;font-weight:600;line-height:1.4}
+.bubble::before{content:"";position:absolute;left:-8px;bottom:14px;border:8px solid transparent;border-right-color:var(--yellow);border-left:0}
+.eye{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+header h1::after{content:" ✦";color:#ffcf4d}
+.gallery h2{display:flex;align-items:center;gap:8px}
 .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .palette{display:flex;gap:6px;flex-wrap:wrap}
 .sw{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);padding:0}
@@ -64,15 +73,15 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;touch-action:none;c
 .rate{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;margin-top:10px}
 .stars{display:flex}
 .stars button{background:none;border:0;font-size:1.5rem;padding:0 2px;color:var(--line);min-width:36px;min-height:44px}
-.stars button.on{color:var(--yellow);text-shadow:0 0 0 #1b2430,1px 1px 0 #1b2430}
+.stars button.on{color:#ffcf4d}
 .gallery{margin-top:16px}
 .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
-.thumbs figure{margin:0;background:var(--panel);border:2px solid var(--ink);border-radius:8px;overflow:hidden}
+.thumbs figure{margin:0;background:var(--panel);border:3px solid var(--edge);border-radius:18px;overflow:hidden}
 .thumbs img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#fff}
 .thumbs figcaption{padding:6px 8px;font-size:.85rem}
 .hint{color:var(--muted);font-size:.9rem}
 [hidden]{display:none!important}
-@media (prefers-reduced-motion:reduce){.timer i{transition:none}}
+@media (prefers-reduced-motion:reduce){.timer i{transition:none}.eye{animation:none}}
 </style>
 </head>
 <body>
@@ -87,10 +96,28 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;touch-action:none;c
 
   <div class="layout">
     <aside class="panel card" aria-label="โจทย์">
+      <div class="mascot" aria-live="polite">
+        <svg viewBox="0 0 120 120" width="96" height="96" role="img" aria-label="น้องแมวนักวาด">
+          <path d="M24 46 L28 12 L54 32 Z" fill="#ffd1a8" stroke="#5b4a6b" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M96 46 L92 12 L66 32 Z" fill="#ffd1a8" stroke="#5b4a6b" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M31 34 L32 22 L43 31 Z" fill="#ffb3c7"/><path d="M89 34 L88 22 L77 31 Z" fill="#ffb3c7"/>
+          <ellipse cx="60" cy="68" rx="42" ry="36" fill="#ffd1a8" stroke="#5b4a6b" stroke-width="3"/>
+          <path d="M60 34v10M50 36v8M70 36v8" stroke="#f2a97a" stroke-width="3" stroke-linecap="round"/>
+          <ellipse class="eye" cx="44" cy="68" rx="5" ry="6.5" fill="#5b4a6b"/><ellipse class="eye" cx="76" cy="68" rx="5" ry="6.5" fill="#5b4a6b"/>
+          <circle cx="45.5" cy="65.5" r="1.8" fill="#fff"/><circle cx="77.5" cy="65.5" r="1.8" fill="#fff"/>
+          <ellipse cx="33" cy="80" rx="7" ry="4.5" fill="#ff9fb8" opacity=".7"/><ellipse cx="87" cy="80" rx="7" ry="4.5" fill="#ff9fb8" opacity=".7"/>
+          <path d="M56 77h8l-4 5z" fill="#ff8fa8"/>
+          <path id="mSmile" d="M52 87Q56 92 60 86Q64 92 68 87" fill="none" stroke="#5b4a6b" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse id="mOpen" cx="60" cy="90" rx="5" ry="6" fill="#ff8fa8" stroke="#5b4a6b" stroke-width="2.5" hidden/>
+          <path d="M20 74L7 70M20 80L7 82M100 74L113 70M100 80L113 82" stroke="#5b4a6b" stroke-width="2" stroke-linecap="round"/>
+          <path d="M98 114L113 90" stroke="#c3a6ff" stroke-width="6" stroke-linecap="round"/><circle cx="95" cy="116" r="5" fill="#ff8fa3"/>
+        </svg>
+        <div class="bubble" id="bubble">สวัสดี! มาวาดรูปกันเถอะ</div>
+      </div>
       <!-- ready -->
       <section id="ready">
         <h2>โจทย์รอบนี้</h2>
-        <div class="subject" id="subject" style="font-family:Prompt,sans-serif;font-weight:700"></div>
+        <div class="subject" id="subject" style="font-family:Mali,sans-serif;font-weight:700"></div>
         <span class="twist" id="twistName"></span>
         <p id="twistDesc"></p>
         <h3 style="font-size:1rem;margin-top:12px">เวลาวาด</h3>
@@ -125,7 +152,18 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;touch-action:none;c
     <main class="stage">
       <div class="canvaswrap">
         <canvas id="cv" width="960" height="720" aria-label="พื้นที่วาดภาพ"></canvas>
-        <div class="lock" id="lock">กด "เริ่มวาด" เพื่อเริ่มรอบแรก</div>
+        <div class="lock" id="lock">
+        <svg viewBox="0 0 120 130" width="92" height="100" aria-hidden="true">
+          <ellipse cx="42" cy="34" rx="11" ry="30" fill="#fff" stroke="#5b4a6b" stroke-width="3" transform="rotate(-8 42 34)"/>
+          <ellipse cx="78" cy="34" rx="11" ry="30" fill="#fff" stroke="#5b4a6b" stroke-width="3" transform="rotate(8 78 34)"/>
+          <ellipse cx="42" cy="38" rx="5" ry="19" fill="#ffc2d6" transform="rotate(-8 42 38)"/><ellipse cx="78" cy="38" rx="5" ry="19" fill="#ffc2d6" transform="rotate(8 78 38)"/>
+          <ellipse cx="60" cy="88" rx="40" ry="34" fill="#fff" stroke="#5b4a6b" stroke-width="3"/>
+          <ellipse class="eye" cx="46" cy="86" rx="4.5" ry="6" fill="#5b4a6b"/><ellipse class="eye" cx="74" cy="86" rx="4.5" ry="6" fill="#5b4a6b"/>
+          <ellipse cx="36" cy="97" rx="7" ry="4.5" fill="#ffb3cc" opacity=".8"/><ellipse cx="84" cy="97" rx="7" ry="4.5" fill="#ffb3cc" opacity=".8"/>
+          <path d="M56 95h8l-4 4z" fill="#ff8fa8"/><path d="M52 103Q56 108 60 102Q64 108 68 103" fill="none" stroke="#5b4a6b" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span id="lockMsg">กด "เริ่มวาด" เพื่อเริ่มรอบแรก</span>
+      </div>
       </div>
       <div class="tools" id="tools">
         <div class="palette" id="palette" role="group" aria-label="สี"></div>
@@ -142,7 +180,7 @@ canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;touch-action:none;c
   </div>
 
   <section class="gallery" aria-label="แกลเลอรี">
-    <h2>แกลเลอรีของห้อง</h2>
+    <h2><svg viewBox="0 0 80 80" width="42" height="42" aria-hidden="true"><circle cx="18" cy="20" r="11" fill="#e8c9a8" stroke="#5b4a6b" stroke-width="3"/><circle cx="62" cy="20" r="11" fill="#e8c9a8" stroke="#5b4a6b" stroke-width="3"/><circle cx="40" cy="44" r="29" fill="#e8c9a8" stroke="#5b4a6b" stroke-width="3"/><ellipse cx="40" cy="54" rx="12" ry="9" fill="#fff3e3"/><circle class="eye" cx="30" cy="40" r="3.5" fill="#5b4a6b"/><circle class="eye" cx="50" cy="40" r="3.5" fill="#5b4a6b"/><ellipse cx="40" cy="51" rx="4" ry="3" fill="#5b4a6b"/><path d="M35 58Q40 62 45 58" fill="none" stroke="#5b4a6b" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="24" cy="52" rx="5" ry="3.5" fill="#ffb3cc" opacity=".8"/><ellipse cx="56" cy="52" rx="5" ry="3.5" fill="#ffb3cc" opacity=".8"/></svg> แกลเลอรีของห้อง</h2>
     <p class="hint" id="galleryHint">ผลงานที่บันทึกจะแสดงที่นี่ (เก็บไว้ชั่วคราวระหว่างเปิดหน้านี้)</p>
     <div class="thumbs" id="thumbs"></div>
   </section>
@@ -156,12 +194,13 @@ const TWISTS=[
  {id:"lines",name:"เส้นตรงเท่านั้น",desc:"ลากเส้นตรงจากจุดหนึ่งไปอีกจุด สร้างรูปจากเรขาคณิต",bonus:20},
  {id:"thick",name:"พู่กันใหญ่เท่านั้น",desc:"ล็อกขนาดเส้นใหญ่ เน้นรูปทรงรวมแทนรายละเอียด",bonus:15}
 ];
-const COLORS=["#1a1a1a","#e63946","#f77f00","#fcbf49","#52b788","#2a9d8f","#1d6fd8","#6a4c93","#f28cb1","#8d5a3b","#9aa5b1"];
+const COLORS=["#5b4a6b","#ff8fa3","#ffb38a","#ffe08a","#9be3b0","#8fdcd3","#8fb8ff","#c3a6ff","#ffb8e0","#d9ae8f","#b8c0cc"];
 const RATES=["ความคิดสร้างสรรค์","องค์ประกอบภาพ","การใช้สี"];
 const $=id=>document.getElementById(id);
 const cv=$("cv"),ctx=cv.getContext("2d",{willReadFrequently:true});
 let S={phase:"ready",subject:"",twist:TWISTS[0],dur:120,left:0,color:COLORS[0],size:12,eraser:false,allowed:COLORS,round:0,total:0,hist:[],ratings:[0,0,0],timer:null};
 const gallery=[];
+function say(t,mood){$("bubble").textContent=t;$("mSmile").hidden=mood==="open";$("mOpen").hidden=mood!=="open"}
 
 function clearCanvas(){ctx.fillStyle="#fff";ctx.fillRect(0,0,cv.width,cv.height)}
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
@@ -201,21 +240,22 @@ document.querySelectorAll("#durSeg button").forEach(b=>b.onclick=()=>{
 
 function show(id){["ready","drawing","rating"].forEach(k=>$(k).hidden=k!==id)}
 
-$("rerollBtn").onclick=newChallenge;
+$("rerollBtn").onclick=()=>{newChallenge();say("โจทย์ใหม่! ลองดูนะ~","smile")};
 $("startBtn").onclick=()=>{
   S.phase="drawing";S.left=S.dur;S.hist=[];clearCanvas();
   $("dSubject").textContent=S.subject;$("dTwist").textContent=S.twist.name;
-  $("lock").hidden=true;show("drawing");tick();
+  $("lock").hidden=true;show("drawing");tick();say("ลุยเลย! วาดให้สนุกนะ","smile");
   S.timer=setInterval(()=>{S.left--;tick();if(S.left<=0)endDrawing()},1000);
 };
 function tick(){
   $("clock").textContent=fmt(Math.max(S.left,0));
   $("timerFill").style.width=(Math.max(S.left,0)/S.dur*100)+"%";
   $("timerBar").classList.toggle("low",S.left<=10);
+  if(S.left===10&&S.phase==="drawing")say("อีก 10 วินาทีแล้วนะ!","open");
 }
 function endDrawing(){
   clearInterval(S.timer);S.phase="rating";S.ratings=[0,0,0];
-  $("lock").hidden=true;buildRating();show("rating");
+  $("lock").hidden=true;buildRating();show("rating");say("เก่งมาก! ให้ดาวผลงานตัวเองหน่อยนะ","open");
 }
 $("doneBtn").onclick=endDrawing;
 
@@ -248,7 +288,7 @@ $("saveBtn").onclick=()=>{
   gallery.unshift({src:cv.toDataURL("image/jpeg",.7),title:S.subject,twist:S.twist.name,score:r.total});
   renderGallery();$("round").textContent=S.round;$("total").textContent=S.total;
   S.phase="ready";clearCanvas();newChallenge();show("ready");
-  $("lock").hidden=false;$("lock").textContent="พร้อมสำหรับรอบถัดไป กด \"เริ่มวาด\"";
+  $("lock").hidden=false;$("lockMsg").textContent="พร้อมสำหรับรอบถัดไป กด \"เริ่มวาด\"";say("บันทึกแล้ว! ไปรอบต่อไปกัน","smile");
 };
 function renderGallery(){
   const t=$("thumbs");t.innerHTML="";$("galleryHint").hidden=gallery.length>0;
