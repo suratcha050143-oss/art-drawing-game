@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>เกมวาดภาพ ห้องศิลปะ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;700&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#e9edf2; --panel:#ffffff; --ink:#1b2430; --muted:#5b6675; --line:#cdd5df;
+  --blue:#1d4ed8; --yellow:#fcc419; --red:#e03131; --on-blue:#ffffff;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#141a22;--panel:#1e2630;--ink:#eef2f7;--muted:#9aa7b8;--line:#344050;--blue:#6b93ff;--on-blue:#10151c;}
+}
+:root[data-theme="dark"]{--bg:#141a22;--panel:#1e2630;--ink:#eef2f7;--muted:#9aa7b8;--line:#344050;--blue:#6b93ff;--on-blue:#10151c;}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Thai",system-ui,sans-serif;line-height:1.6}
+h1,h2,h3{font-family:"Prompt","Noto Sans Thai",system-ui,sans-serif;margin:0;line-height:1.25}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+header h1{font-size:1.6rem}
+.stats{display:flex;gap:10px}
+.stat{background:var(--panel);border:2px solid var(--ink);border-radius:8px;padding:4px 14px;text-align:center;min-width:84px}
+.stat b{display:block;font-family:"Prompt",sans-serif;font-size:1.3rem}
+.stat span{font-size:.8rem;color:var(--muted)}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+@media (max-width:820px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:2px solid var(--ink);border-radius:10px;padding:16px}
+.card .subject{font-size:2rem;margin:6px 0 2px}
+.twist{display:inline-block;background:var(--yellow);color:#1b2430;border:2px solid #1b2430;border-radius:6px;padding:2px 10px;font-weight:600}
+.card p{margin:8px 0;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:2px solid var(--ink);background:var(--panel);border-radius:8px;padding:8px 14px;font-weight:600;min-height:44px}
+.btn.primary{background:var(--blue);color:var(--on-blue)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.seg{display:flex;gap:6px;margin-top:8px}
+.seg button{flex:1;border:2px solid var(--line);background:transparent;border-radius:8px;padding:6px;min-height:44px}
+.seg button[aria-pressed="true"]{border-color:var(--ink);background:var(--yellow);color:#1b2430;font-weight:600}
+.timer{height:12px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.timer i{display:block;height:100%;width:100%;background:var(--blue);transition:width 1s linear}
+.timer.low i{background:var(--red)}
+.clock{font-family:"Prompt",sans-serif;font-size:1.4rem}
+.stage{display:flex;flex-direction:column;gap:10px;min-width:0}
+.canvaswrap{position:relative;background:#fff;border:2px solid var(--ink);border-radius:10px;overflow:hidden}
+canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;touch-action:none;cursor:crosshair}
+.lock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,26,34,.55);color:#fff;font-family:"Prompt",sans-serif;font-size:1.3rem;text-align:center;padding:20px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.palette{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);padding:0}
+.sw[aria-pressed="true"]{border:3px solid var(--ink);box-shadow:0 0 0 2px var(--panel) inset}
+.sw.off{opacity:.18;cursor:not-allowed}
+.sizes button{width:44px;height:44px;border:2px solid var(--line);background:transparent;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}
+.sizes button[aria-pressed="true"]{border-color:var(--ink);background:var(--yellow)}
+.sizes button:disabled{opacity:.3}
+.dot{display:block;background:var(--ink);border-radius:50%}
+.rate{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;margin-top:10px}
+.stars{display:flex}
+.stars button{background:none;border:0;font-size:1.5rem;padding:0 2px;color:var(--line);min-width:36px;min-height:44px}
+.stars button.on{color:var(--yellow);text-shadow:0 0 0 #1b2430,1px 1px 0 #1b2430}
+.gallery{margin-top:16px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
+.thumbs figure{margin:0;background:var(--panel);border:2px solid var(--ink);border-radius:8px;overflow:hidden}
+.thumbs img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#fff}
+.thumbs figcaption{padding:6px 8px;font-size:.85rem}
+.hint{color:var(--muted);font-size:.9rem}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.timer i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>เกมวาดภาพ ห้องศิลปะ</h1>
+    <div class="stats" aria-live="polite">
+      <div class="stat"><b id="round">0</b><span>รอบ</span></div>
+      <div class="stat"><b id="total">0</b><span>คะแนนรวม</span></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="panel card" aria-label="โจทย์">
+      <!-- ready -->
+      <section id="ready">
+        <h2>โจทย์รอบนี้</h2>
+        <div class="subject" id="subject" style="font-family:Prompt,sans-serif;font-weight:700"></div>
+        <span class="twist" id="twistName"></span>
+        <p id="twistDesc"></p>
+        <h3 style="font-size:1rem;margin-top:12px">เวลาวาด</h3>
+        <div class="seg" id="durSeg">
+          <button data-d="60" aria-pressed="false">1 นาที</button>
+          <button data-d="120" aria-pressed="true">2 นาที</button>
+          <button data-d="180" aria-pressed="false">3 นาที</button>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="startBtn">เริ่มวาด</button>
+          <button class="btn" id="rerollBtn">สุ่มโจทย์ใหม่</button>
+        </div>
+      </section>
+      <!-- drawing -->
+      <section id="drawing" hidden>
+        <h2 id="dSubject"></h2>
+        <span class="twist" id="dTwist"></span>
+        <div class="timer" id="timerBar"><i id="timerFill"></i></div>
+        <div class="clock" id="clock" role="timer">2:00</div>
+        <div class="row"><button class="btn primary" id="doneBtn">วาดเสร็จแล้ว</button></div>
+      </section>
+      <!-- rating -->
+      <section id="rating" hidden>
+        <h2>ให้คะแนนผลงานตัวเอง</h2>
+        <p class="hint">ให้ดาว 1–5 ในแต่ละด้าน</p>
+        <div class="rate" id="rateBox"></div>
+        <p id="scoreNote" class="hint"></p>
+        <div class="row"><button class="btn primary" id="saveBtn" disabled>บันทึกและเล่นรอบต่อไป</button></div>
+      </section>
+    </aside>
+
+    <main class="stage">
+      <div class="canvaswrap">
+        <canvas id="cv" width="960" height="720" aria-label="พื้นที่วาดภาพ"></canvas>
+        <div class="lock" id="lock">กด "เริ่มวาด" เพื่อเริ่มรอบแรก</div>
+      </div>
+      <div class="tools" id="tools">
+        <div class="palette" id="palette" role="group" aria-label="สี"></div>
+        <div class="sizes" id="sizes" role="group" aria-label="ขนาดเส้น">
+          <button data-s="4" aria-label="เส้นเล็ก" aria-pressed="false"><i class="dot" style="width:6px;height:6px"></i></button>
+          <button data-s="12" aria-label="เส้นกลาง" aria-pressed="true"><i class="dot" style="width:12px;height:12px"></i></button>
+          <button data-s="28" aria-label="เส้นใหญ่" aria-pressed="false"><i class="dot" style="width:22px;height:22px"></i></button>
+        </div>
+        <button class="btn" id="eraserBtn" aria-pressed="false">ยางลบ</button>
+        <button class="btn" id="undoBtn">ย้อนกลับ</button>
+        <button class="btn" id="clearBtn">ล้างภาพ</button>
+      </div>
+    </main>
+  </div>
+
+  <section class="gallery" aria-label="แกลเลอรี">
+    <h2>แกลเลอรีของห้อง</h2>
+    <p class="hint" id="galleryHint">ผลงานที่บันทึกจะแสดงที่นี่ (เก็บไว้ชั่วคราวระหว่างเปิดหน้านี้)</p>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+</div>
+
+<script>
+const SUBJECTS=["แมวง่วงนอน","บ้านบนต้นไม้","ปลาในอวกาศ","หุ่นยนต์ใจดี","ตลาดน้ำ","ช้างถือร่ม","ภูเขาไฟน้อย","รถไฟสายรุ้ง","ดอกไม้ยักษ์","เมืองใต้ทะเล","นกฮูกนักอ่าน","เรือในขวดแก้ว","สวนสัตว์กลางคืน","มังกรกินข้าวเหนียว","ปราสาทบนก้อนเมฆ","ร้านอาหารของมอนสเตอร์"];
+const TWISTS=[
+ {id:"free",name:"วาดอิสระ",desc:"ใช้สีและเส้นได้ตามใจ ปล่อยจินตนาการเต็มที่",bonus:0},
+ {id:"three",name:"ใช้ 3 สีเท่านั้น",desc:"สุ่มให้ 3 สี ลองผสมความรู้สึกของภาพด้วยสีที่จำกัด",bonus:15},
+ {id:"lines",name:"เส้นตรงเท่านั้น",desc:"ลากเส้นตรงจากจุดหนึ่งไปอีกจุด สร้างรูปจากเรขาคณิต",bonus:20},
+ {id:"thick",name:"พู่กันใหญ่เท่านั้น",desc:"ล็อกขนาดเส้นใหญ่ เน้นรูปทรงรวมแทนรายละเอียด",bonus:15}
+];
+const COLORS=["#1a1a1a","#e63946","#f77f00","#fcbf49","#52b788","#2a9d8f","#1d6fd8","#6a4c93","#f28cb1","#8d5a3b","#9aa5b1"];
+const RATES=["ความคิดสร้างสรรค์","องค์ประกอบภาพ","การใช้สี"];
+const $=id=>document.getElementById(id);
+const cv=$("cv"),ctx=cv.getContext("2d",{willReadFrequently:true});
+let S={phase:"ready",subject:"",twist:TWISTS[0],dur:120,left:0,color:COLORS[0],size:12,eraser:false,allowed:COLORS,round:0,total:0,hist:[],ratings:[0,0,0],timer:null};
+const gallery=[];
+
+function clearCanvas(){ctx.fillStyle="#fff";ctx.fillRect(0,0,cv.width,cv.height)}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+
+function newChallenge(){
+  S.subject=pick(SUBJECTS);S.twist=pick(TWISTS);
+  S.allowed=S.twist.id==="three"?[...COLORS].sort(()=>Math.random()-.5).slice(0,3):COLORS;
+  $("subject").textContent=S.subject;$("twistName").textContent=S.twist.name;$("twistDesc").textContent=S.twist.desc;
+  applyTwist();
+}
+function applyTwist(){
+  if(!S.allowed.includes(S.color))S.color=S.allowed[0];
+  if(S.twist.id==="thick")S.size=28;
+  renderTools();
+}
+function renderTools(){
+  const p=$("palette");p.innerHTML="";
+  COLORS.forEach(c=>{
+    const b=document.createElement("button");b.className="sw";b.style.background=c;
+    const ok=S.allowed.includes(c);if(!ok){b.classList.add("off");b.disabled=true}
+    b.setAttribute("aria-label","สี "+c);b.setAttribute("aria-pressed",String(!S.eraser&&S.color===c));
+    b.onclick=()=>{S.color=c;S.eraser=false;renderTools()};p.appendChild(b);
+  });
+  document.querySelectorAll("#sizes button").forEach(b=>{
+    const locked=S.twist.id==="thick";
+    b.disabled=locked&&b.dataset.s!=="28";
+    b.setAttribute("aria-pressed",String(+b.dataset.s===S.size));
+  });
+  $("eraserBtn").setAttribute("aria-pressed",String(S.eraser));
+}
+document.querySelectorAll("#sizes button").forEach(b=>b.onclick=()=>{S.size=+b.dataset.s;renderTools()});
+$("eraserBtn").onclick=()=>{S.eraser=!S.eraser;renderTools()};
+document.querySelectorAll("#durSeg button").forEach(b=>b.onclick=()=>{
+  S.dur=+b.dataset.d;document.querySelectorAll("#durSeg button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+});
+
+function show(id){["ready","drawing","rating"].forEach(k=>$(k).hidden=k!==id)}
+
+$("rerollBtn").onclick=newChallenge;
+$("startBtn").onclick=()=>{
+  S.phase="drawing";S.left=S.dur;S.hist=[];clearCanvas();
+  $("dSubject").textContent=S.subject;$("dTwist").textContent=S.twist.name;
+  $("lock").hidden=true;show("drawing");tick();
+  S.timer=setInterval(()=>{S.left--;tick();if(S.left<=0)endDrawing()},1000);
+};
+function tick(){
+  $("clock").textContent=fmt(Math.max(S.left,0));
+  $("timerFill").style.width=(Math.max(S.left,0)/S.dur*100)+"%";
+  $("timerBar").classList.toggle("low",S.left<=10);
+}
+function endDrawing(){
+  clearInterval(S.timer);S.phase="rating";S.ratings=[0,0,0];
+  $("lock").hidden=true;buildRating();show("rating");
+}
+$("doneBtn").onclick=endDrawing;
+
+function calcScore(){
+  const stars=S.ratings.reduce((a,b)=>a+b,0);
+  const timeBonus=Math.round(Math.max(S.left,0)/S.dur*10);
+  return {stars,timeBonus,total:stars*10+S.twist.bonus+timeBonus};
+}
+function buildRating(){
+  const box=$("rateBox");box.innerHTML="";
+  RATES.forEach((label,i)=>{
+    const l=document.createElement("div");l.textContent=label;
+    const st=document.createElement("div");st.className="stars";st.setAttribute("role","group");st.setAttribute("aria-label",label);
+    for(let n=1;n<=5;n++){
+      const b=document.createElement("button");b.textContent="★";b.setAttribute("aria-label",n+" ดาว");
+      b.onclick=()=>{S.ratings[i]=n;[...st.children].forEach((x,k)=>x.classList.toggle("on",k<n));updateScore()};
+      st.appendChild(b);
+    }
+    box.append(l,st);
+  });
+  updateScore();
+}
+function updateScore(){
+  const r=calcScore(),done=S.ratings.every(x=>x>0);
+  $("scoreNote").textContent=done?`ดาว ${r.stars*10} + โบนัสโจทย์ ${S.twist.bonus} + โบนัสเวลา ${r.timeBonus} = ${r.total} คะแนน`:"ให้ดาวให้ครบทั้ง 3 ด้านเพื่อดูคะแนน";
+  $("saveBtn").disabled=!done;
+}
+$("saveBtn").onclick=()=>{
+  const r=calcScore();S.total+=r.total;S.round++;
+  gallery.unshift({src:cv.toDataURL("image/jpeg",.7),title:S.subject,twist:S.twist.name,score:r.total});
+  renderGallery();$("round").textContent=S.round;$("total").textContent=S.total;
+  S.phase="ready";clearCanvas();newChallenge();show("ready");
+  $("lock").hidden=false;$("lock").textContent="พร้อมสำหรับรอบถัดไป กด \"เริ่มวาด\"";
+};
+function renderGallery(){
+  const t=$("thumbs");t.innerHTML="";$("galleryHint").hidden=gallery.length>0;
+  gallery.forEach(g=>{
+    const f=document.createElement("figure"),im=document.createElement("img"),c=document.createElement("figcaption");
+    im.src=g.src;im.alt="ภาพวาด "+g.title;c.textContent=`${g.title} • ${g.score} คะแนน`;
+    f.append(im,c);t.appendChild(f);
+  });
+}
+
+/* drawing */
+function pt(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}}
+function snap(){S.hist.push(ctx.getImageData(0,0,cv.width,cv.height));if(S.hist.length>25)S.hist.shift()}
+let down=false,last=null,start=null,base=null;
+function style(){ctx.lineCap="round";ctx.lineJoin="round";ctx.lineWidth=S.size*(S.eraser?1.6:1);ctx.strokeStyle=S.eraser?"#fff":S.color;ctx.fillStyle=ctx.strokeStyle}
+function seg(a,b){style();ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+const straight=()=>S.twist.id==="lines"&&!S.eraser;
+cv.addEventListener("pointerdown",e=>{
+  if(S.phase!=="drawing")return;
+  cv.setPointerCapture(e.pointerId);snap();down=true;last=start=pt(e);
+  if(straight())base=ctx.getImageData(0,0,cv.width,cv.height);else seg(last,last);
+});
+cv.addEventListener("pointermove",e=>{
+  if(!down)return;const p=pt(e);
+  if(straight()){ctx.putImageData(base,0,0);seg(start,p)}else{seg(last,p)}
+  last=p;
+});
+["pointerup","pointercancel"].forEach(ev=>cv.addEventListener(ev,()=>{down=false}));
+$("undoBtn").onclick=()=>{if(S.phase==="drawing"&&S.hist.length)ctx.putImageData(S.hist.pop(),0,0)};
+$("clearBtn").onclick=()=>{if(S.phase==="drawing"){snap();clearCanvas()}};
+
+clearCanvas();newChallenge();
+</script>
+</body>
+</html>
